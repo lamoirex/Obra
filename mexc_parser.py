@@ -1,3 +1,5 @@
+from traceback import format_list
+
 import requests
 
 base_url_mexc = "http://api.mexc.com"
@@ -30,5 +32,16 @@ def parse_ticker_fields(t: dict) -> dict:
 if __name__ == "__main__":
     tickers = get_tickers(symbol = None)
     print("Всего тикеров(mexc):", len(tickers))
+
+    MIN_VOLUME_24H = 1000000
+    filtered_tickers = []
     for ticker in tickers:
-        print(parse_ticker_fields(ticker))
+        sym = ticker.get("symbol") or ""
+        if not sym.endswith("USDT"):
+            continue
+        vol = float(ticker.get("volume", 0) or 0)
+        if vol < MIN_VOLUME_24H:
+            continue
+        filtered_tickers.append(ticker)
+    print('Кандидаты в "хорошие" монеты после фильтра по USDT и volume:', len(filtered_tickers))
+
