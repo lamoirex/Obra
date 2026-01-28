@@ -30,8 +30,17 @@ def parse_ticker_fields(t:dict) -> dict:
 
 if __name__ == "__main__":
     tickers = get_tickers(None)
-    parsed_list = [parse_ticker_fields(t) for t in tickers]
+    print("Всего тикеров(htx):", len(tickers))
 
-    print("Всего тикеров(htx):", len(parsed_list))
-    for ticker in parsed_list:
-        print(ticker)
+    MIN_VOLUME_24H = 1000000
+    filtered_tickers = []
+    for ticker in tickers:
+        sym = ticker.get("symbol") or ""
+        if not sym.endswith("usdt"):
+            continue
+        vol = float(ticker.get("amount",0) or 0)
+        if vol < MIN_VOLUME_24H:
+            continue
+        filtered_tickers.append(ticker)
+    print('Кандидаты в "хорошие" монеты после фильтра по USDT и volume:', len(filtered_tickers))
+

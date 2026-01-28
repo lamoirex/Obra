@@ -46,3 +46,5 @@ if __name__ == "__main__":
         filtered_tickers.append(ticker)
 
     print(f'Кандидаты в "хорошие" монеты после фильтра по USDT и volume:', len(filtered_tickers))
+    #for ticker in filtered_tickers:
+        #print(parse_ticker_fields(ticker))
